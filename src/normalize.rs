@@ -36,6 +36,9 @@ fn process(n: &mut Node) {
         NodeEnum::Text(_) => { },
         NodeEnum::Comment(_) => { },
         NodeEnum::Element(_, _, ref mut attrs) => {
+            for a in attrs.iter_mut() {
+                a.name.local = a.name.local.to_ascii_lowercase();
+            }
             attrs.sort();
         },
     }

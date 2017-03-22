@@ -18,6 +18,9 @@ doc = false
 bitflags = "0.8"
 getopts = { version = "0.2", optional = true }
 html5ever = "*"
+tendril = "*"
+regex = "*"
+lazy_static = "*"
 
 [features]
 default = ["getopts"]

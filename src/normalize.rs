@@ -1,13 +1,13 @@
-extern crate html5ever;
-
 use std::default::Default;
+use std::fmt::Write;
 
-use self::html5ever::tendril::TendrilSink;
-use self::html5ever::driver::ParseOpts;
-use self::html5ever::tree_builder::TreeBuilderOpts;
-use self::html5ever::parse_document;
-use self::html5ever::serialize::{SerializeOpts, serialize};
-use self::html5ever::rcdom::{RcDom, Node, NodeEnum};
+use regex::Regex;
+use html5ever::tendril::TendrilSink;
+use html5ever::driver::ParseOpts;
+use html5ever::tree_builder::TreeBuilderOpts;
+use html5ever::parse_document;
+use html5ever::serialize::{SerializeOpts, serialize};
+use html5ever::rcdom::{RcDom, Node, NodeEnum};
 
 pub fn normalize(s: &str) -> String {
     let opts = ParseOpts {
@@ -30,10 +30,18 @@ pub fn normalize(s: &str) -> String {
 }
 
 fn process(n: &mut Node) {
+    lazy_static! {
+        static ref WHITESPACE_RE: Regex = Regex::new(r"\s+").unwrap();
+    }
+
     match n.node {
         NodeEnum::Document => { },
         NodeEnum::Doctype(..) => { },
-        NodeEnum::Text(_) => { },
+        NodeEnum::Text(ref mut t) => {
+            let s = &*WHITESPACE_RE.replace_all(&**t, " ").into_owned();
+            t.clear();
+            t.write_str(&s).unwrap();
+        },
         NodeEnum::Comment(_) => { },
         NodeEnum::Element(_, _, ref mut attrs) => {
             for a in attrs.iter_mut() {

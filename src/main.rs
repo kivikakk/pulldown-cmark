@@ -21,6 +21,10 @@
 //! Command line tool to exercise pulldown-cmark.
 
 extern crate getopts;
+extern crate html5ever;
+extern crate tendril;
+extern crate regex;
+#[macro_use] extern crate lazy_static;
 
 extern crate pulldown_cmark;
 
@@ -182,6 +186,8 @@ fn run_spec(spec_text: &str, args: &[String], opts: Options) {
             if tests_failed == 0 {
                 print!("FAIL {}:\n\n---input---\n{}\n\n---wanted---\n{}\n\n---got---\n{}\n",
                     test.n, test.input, test.expected, our_html);
+                print!("POST NORMALIZATION {}:\n\n---input---\n{}\n\n---wanted---\n{}\n\n---got---\n{}\n",
+                    test.n, test.input, normalize(&test.expected), normalize(&our_html));
             } else {
                 print!("X");
             }

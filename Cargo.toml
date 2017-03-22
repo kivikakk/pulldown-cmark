@@ -17,6 +17,7 @@ doc = false
 [dependencies]
 bitflags = "0.8"
 getopts = { version = "0.2", optional = true }
+html5ever = "*"
 
 [features]
 default = ["getopts"]

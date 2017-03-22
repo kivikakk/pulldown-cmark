@@ -24,6 +24,9 @@ extern crate getopts;
 
 extern crate pulldown_cmark;
 
+mod normalize;
+use normalize::normalize;
+
 use pulldown_cmark::Parser;
 use pulldown_cmark::{Options, OPTION_ENABLE_TABLES, OPTION_ENABLE_FOOTNOTES};
 use pulldown_cmark::html;
@@ -173,7 +176,7 @@ fn run_spec(spec_text: &str, args: &[String], opts: Options) {
 
         let our_html = render_html(&test.input.replace("→", "\t").replace("\n", "\r\n"), opts);
 
-        if our_html == test.expected.replace("→", "\t") {
+        if normalize(&our_html) == normalize(&test.expected.replace("→", "\t")) {
             print!(".");
         } else {
             if tests_failed == 0 {

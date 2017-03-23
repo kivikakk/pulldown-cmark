@@ -50,7 +50,7 @@ fn process(n: &mut Node, prev_el: Option<String>, next_el: Option<String>) {
         NodeEnum::Document => { },
         NodeEnum::Doctype(..) => { },
         NodeEnum::Text(ref mut t) => {
-            let mut s = WHITESPACE_RE.replace_all(t, " ").into_owned().to_string();
+            let mut s = WHITESPACE_RE.replace_all(t, " ").into_owned();
             if let Some(prev_el_name) = prev_el {
                 if BLOCK_TAGS.contains(&*prev_el_name) {
                     s = LEADING_WHITESPACE_RE.replace_all(&s, "").into_owned();
